@@ -1,0 +1,5 @@
+chromadb
+pymupdf
+sentence-transformers
+ollama
+fitz
