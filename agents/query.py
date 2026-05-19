@@ -1,7 +1,7 @@
 import ollama
 
-from data_embedding import DataEmbedding
-from storage import StoreEmbeddings
+from ingestion.data_embedding import DataEmbedding
+from storage.storage import StoreEmbeddings
 
 
 class QuerySearch:

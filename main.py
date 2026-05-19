@@ -1,6 +1,6 @@
-from data_embedding import DataEmbedding
-from query import QuerySearch
-from storage import StoreEmbeddings
+from ingestion.data_embedding import DataEmbedding
+from agents.query import QuerySearch
+from storage.storage import StoreEmbeddings
 
 
 def main():

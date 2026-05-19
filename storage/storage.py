@@ -6,7 +6,7 @@ class StoreEmbeddings:
         self.collection = None
 
     def initialize_vector_db(self):
-        db = chromadb.PersistentClient(path = "./vector_db")
+        db = chromadb.PersistentClient(path ="../vector_db")
         self.collection = db.get_or_create_collection(name = "pdf_knowledge_Base")
         print("initialized vector db")
 
