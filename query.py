@@ -1,24 +1,22 @@
 import ollama
 
-from data_embedding import DataEmbedding
-from storage import StoreEmbeddings
+from ingestion.data_ingestion import DataIngestion
+from storage.storage import StoreEmbeddings
 
 
-class QuerySearch:
+class QuerySearch(DataIngestion,StoreEmbeddings):
 
     def __init__(self, user_query):
+        super().__init__()
         self.query_embeddings = None
         self.retrieved_chunks = None
         self.user_query = user_query
 
     def query_retrieval(self):
-        emb = DataEmbedding("", "")
-        emb.load_embedding_modal()
-        embedding_modal = emb.embedding_modal
-        self.query_embeddings = embedding_modal.encode(self.user_query).tolist()
+        self.load_embedding_modal()
+        self.query_embeddings = self.embedding_modal.encode(self.user_query).tolist()
 
     def similarity_search(self):
-        storage = StoreEmbeddings()
         storage.initialize_vector_db()
         collection = storage.collection
         results = collection.query(query_embeddings=self.query_embeddings, n_results=3)
