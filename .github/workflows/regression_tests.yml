@@ -1,20 +1,19 @@
 name: Regression Tests
 
 on:
-  push:
-    branches:
-      - master
+  schedule:
+    - cron: '0 2 * * *'
 
 jobs:
   tests:
-    runs-on: ubuntu_latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Project
         uses: actions/checkout@v4
 
       - name: Install Python
-        uses: actions/python@v5
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -22,10 +21,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          playwright install
+          python -m playwright install
 
       - name: Run Regression Tests
-        run: pytest -m regression
+        run: |
+          mkdir -p reports
+          python -m pytest -m regression --html=reports/regression_report.html
 
       - name: Upload Reports
         uses: actions/upload-artifact@v4

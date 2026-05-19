@@ -6,3 +6,4 @@ fitz
 pytest
 playwright
 pytest-playwright
+pytest-html
