@@ -1,7 +1,8 @@
 import ollama
 
-from embedding import load_embedding_modal
-from storage import initialize_chromadb
+from data_embedding import DataEmbedding
+from storage import StoreEmbeddings
+
 
 class QuerySearch:
 
@@ -11,11 +12,15 @@ class QuerySearch:
         self.user_query = user_query
 
     def query_retrieval(self):
-        embedding_modal = load_embedding_modal()
+        emb = DataEmbedding("", "")
+        emb.load_embedding_modal()
+        embedding_modal = emb.embedding_modal
         self.query_embeddings = embedding_modal.encode(self.user_query).tolist()
 
     def similarity_search(self):
-        collection = initialize_chromadb()
+        storage = StoreEmbeddings()
+        storage.initialize_vector_db()
+        collection = storage.collection
         results = collection.query(query_embeddings=self.query_embeddings, n_results=3)
         self.retrieved_chunks = results["documents"][0]
 
@@ -35,7 +40,7 @@ class QuerySearch:
         
         """
 
-        response = ollama.chat(model="llama3:8B",
+        response = ollama.chat(model="llama3.2:3b",
                                messages = [
                                    {
                                        "role": "user",
@@ -43,4 +48,4 @@ class QuerySearch:
                                    }
                                ]
                             )
-        print(response["messages"]["content"])
+        print(response["message"]["content"])
