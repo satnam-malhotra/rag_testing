@@ -1,4 +1,5 @@
 from ingestion.data_ingestion import DataIngestion
+from agents.query import QuerySearch
 from storage.storage import StoreEmbeddings
 
 

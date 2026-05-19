@@ -4,7 +4,7 @@ from ingestion.data_ingestion import DataIngestion
 from storage.storage import StoreEmbeddings
 
 
-class QuerySearch(DataIngestion,StoreEmbeddings):
+class QuerySearch(DataIngestion, StoreEmbeddings):
 
     def __init__(self, user_query):
         super().__init__()
@@ -17,9 +17,8 @@ class QuerySearch(DataIngestion,StoreEmbeddings):
         self.query_embeddings = self.embedding_modal.encode(self.user_query).tolist()
 
     def similarity_search(self):
-        storage.initialize_vector_db()
-        collection = storage.collection
-        results = collection.query(query_embeddings=self.query_embeddings, n_results=3)
+        self.initialize_vector_db()
+        results = self.collection.query(query_embeddings=self.query_embeddings, n_results=3)
         self.retrieved_chunks = results["documents"][0]
 
     def query_result(self):
@@ -29,21 +28,21 @@ class QuerySearch(DataIngestion,StoreEmbeddings):
         context = "\n".join(self.retrieved_chunks)
 
         prompt = f"""
-        
+
         Answer only using the given context
-        
+
         context: {context}
-        
+
         Question: {self.user_query}
-        
+
         """
 
         response = ollama.chat(model="llama3.2:3b",
-                               messages = [
+                               messages=[
                                    {
                                        "role": "user",
                                        "content": prompt
                                    }
                                ]
-                            )
-        print(response["message"]["content"])
+                               )
+        print(f"Answer: {response['message']['content']}")
