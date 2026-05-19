@@ -1,4 +1,4 @@
-name: QA Automation Task
+name: Regression Tests
 
 on:
   push:
@@ -6,26 +6,30 @@ on:
       - master
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  tests:
+    runs-on: ubuntu_latest
 
     steps:
       - name: Checkout Project
         uses: actions/checkout@v4
 
       - name: Install Python
-        uses: actions/setup-python@v5
+        uses: actions/python@v5
         with:
           python-version: '3.11'
 
       - name: Install Dependencies
-        run: pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Run Tests
-        run: pytest
+      - name: Run Regression Tests
+        run: pytest -m regression
 
       - name: Upload Reports
         uses: actions/upload-artifact@v4
         with:
-          name: pytest-report
+          name: regression-report
           path: reports/
+
+

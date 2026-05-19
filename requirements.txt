@@ -4,3 +4,5 @@ sentence-transformers
 ollama
 fitz
 pytest
+playwright
+pytest-playwright
