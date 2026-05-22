@@ -1,3 +1,5 @@
+from logging import exception
+
 import chromadb
 
 class StoreEmbeddings:
@@ -7,6 +9,10 @@ class StoreEmbeddings:
 
     def initialize_vector_db(self):
         db = chromadb.PersistentClient(path ="../vector_db")
+        try:
+            db.delete_collection(name = "pdf_knowledge_Base")
+        except ValueError as error:
+            pass
         self.collection = db.get_or_create_collection(name = "pdf_knowledge_Base")
         print("initialized vector db")
 
